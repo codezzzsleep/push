@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>待办事项</title>
+    <title>今日待办</title>
     <style>
         .el-header {
             background-color: #B3C0D1;
@@ -85,10 +85,6 @@
                 </el-header>
 
                 <el-main>
-                    <template>
-                        Scroll down to see the bottom-right button.
-                        <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
-                    </template>
                     <el-table :data="tableData">
                         <el-table-column prop="date" label="日期" width="140">
                         </el-table-column>
