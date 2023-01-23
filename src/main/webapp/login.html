@@ -6,76 +6,81 @@
     <title>登录</title>
 </head>
 
-<body style="background: #8cc5ff">
-    <div id="app" style="width: 30%; margin-left: 30%;margin-right: 30%; margin-top: 10%;">
-        <h2 style="margin-left: 50%;">
-            欢迎登录
-        </h2>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="账户" prop="name">
-                <el-input v-model="ruleForm.name"></el-input>
+<body style="background: #79bbff">
+<div id="app" style="width: 30%; margin-left: 30%;margin-right: 30%; margin-top: 10%;">
+    <h2 style="margin-left: 50%;">
+        欢迎登录
+    </h2>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="账户" prop="name">
+            <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        </el-form-item>
+        <div style="margin-left:10%;">
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                <el-button type="primary" @click="open" style="margin-left: 30%;">注册</el-button>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-            </el-form-item>
-            <div style="margin-left:10%;">
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                    <el-button type="primary" @click="open" style="margin-left: 30%;">注册</el-button>
-                </el-form-item>
-            </div>
-        </el-form>
-    </div>
+        </div>
+    </el-form>
+    <div v-model="foot">关注我的一般只有两种人，一种是暗恋我的，一种是暗算我的。</div>
+</div>
 
-    <script src="js/vue.js"></script>
-    <script src="element-ui/lib/index.js"></script>
-    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
-    <script>
-        new Vue({
-            el: "#app",
-            data() {
-                return {
-                    ruleForm: {
-                        name: '',
-                        pass: ''
-                    },
-                    rules: {
-                        name: [{
-                            required: true,
-                            message: '请输入账户',
-                            trigger: 'blur'
-                        }],
-                        pass: [{
-                            required: true,
-                            message: '请输入密码',
-                            trigger: 'blur'
-                        }]
-                    }
-                };
-            },
-            methods: {
-                submitForm(formName) {
-                    this.$refs[formName].validate((valid) => {
-                        if (valid) {
-                            alert('submit!');
-                        } else {
-                            console.log('error submit!!');
-                            return false;
-                        }
-                    });
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                ruleForm: {
+                    name: '',
+                    pass: ''
                 },
-                resetForm(formName) {
-                    this.$refs[formName].resetFields();
-                },
-                open() {
-                    this.$alert('请联系管理员添加', '注册提示', {
-                        confirmButtonText: '确定',
-                    });
+                rules: {
+                    name: [{
+                        required: true,
+                        message: '请输入账户',
+                        trigger: 'blur'
+                    }],
+                    pass: [{
+                        required: true,
+                        message: '请输入密码',
+                        trigger: 'blur'
+                    }]
                 }
+            };
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            open() {
+                this.$alert('请联系管理员添加', '注册提示', {
+                    confirmButtonText: '确定',
+                });
             }
+        },
+        //当页面加载完成后自动调用
+        mounted({
 
-        })
-    </script>
+                })
+
+    })
+</script>
 </body>
 
 </html>
