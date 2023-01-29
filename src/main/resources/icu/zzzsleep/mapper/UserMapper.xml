@@ -6,7 +6,7 @@
     <select id="selectAll" resultType="icu.zzzsleep.project.User">
         select * from user;
     </select>
-    <select id="selectById" resultType="icu.zzzsleep.project.User">
-        select * from user where id = ${};
+    <select id="select" resultType="icu.zzzsleep.project.User">
+        select * from user where username = #{username} and password = #{password};
     </select>
 </mapper>

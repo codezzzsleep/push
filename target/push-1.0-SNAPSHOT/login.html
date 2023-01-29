@@ -7,90 +7,110 @@
 </head>
 
 <body style="background: #79bbff">
-    <div id="app" style="width: 30%; margin-left: 30%;margin-right: 30%; margin-top: 10%;">
-        <h2 style="margin-left: 50%;">
-            欢迎登录
-        </h2>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="账户" prop="name">
-                <el-input v-model="ruleForm.name"></el-input>
+<div id="app" style="width: 30%; margin-left: 30%;margin-right: 30%; margin-top: 10%;">
+    <h2 style="margin-left: 50%;">
+        欢迎登录
+    </h2>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="账户" prop="name">
+            <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+        </el-form-item>
+        <div style="margin-left:10%;">
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                <el-button type="primary" @click="open" style="margin-left: 30%;">注册</el-button>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-            </el-form-item>
-            <div style="margin-left:10%;">
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                    <el-button type="primary" @click="open" style="margin-left: 30%;">注册</el-button>
-                </el-form-item>
-            </div>
-        </el-form>
-    </div>
-    <div id="sentence" style="text-align: center; margin-top: 10%;">关注我的一般只有两种人，一种是暗恋我的，一种是暗算我的。</div>
+        </div>
+    </el-form>
+</div>
+<div id="sentence" style="text-align: center; margin-top: 10%;">耐心点，给好运一点时间。</div>
 
-
-    <script src="js/vue.js"></script>
-    <script src="js/axios-0.18.0.js"></script>
-    <script src="element-ui/lib/index.js"></script>
-    <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
-    <script>
-        new Vue({
-            el: "#app",
-            data() {
-                return {
-                    ruleForm: {
-                        name: '',
-                        pass: ''
-                    },
-                    rules: {
-                        name: [{
-                            required: true,
-                            message: '请输入账户',
-                            trigger: 'blur'
-                        }],
-                        pass: [{
-                            required: true,
-                            message: '请输入密码',
-                            trigger: 'blur'
-                        }]
-                    }
-                };
-            },
-            methods: {
-                submitForm(formName) {
-                    this.$refs[formName].validate((valid) => {
-                        if (valid) {
-                            alert('submit!');
-                        } else {
-                            console.log('error submit!!');
-                            return false;
-                        }
-                    });
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/qs.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                ruleForm: {
+                    name: '',
+                    pass: ''
                 },
-                resetForm(formName) {
-                    this.$refs[formName].resetFields();
-                },
-                open() {
-                    this.$alert('请联系管理员添加', '注册提示', {
-                        confirmButtonText: '确定',
-                    });
+                rules: {
+                    name: [{
+                        required: true,
+                        message: '请输入账户',
+                        trigger: 'blur'
+                    }],
+                    pass: [{
+                        required: true,
+                        message: '请输入密码',
+                        trigger: 'blur'
+                    }]
                 }
-            },
-            //当页面加载完成后自动调用
-            mounted() {
-                axios({
-                    methods: "get",
-                    url: "https://v.api.aa1.cn/api/api-wenan-anwei/index.php?type=json"
-                }).then(function(resp) {
-                    if (resp.status == 200) {
-                        document.getElementById("sentence").innerHTML = resp.data.anwei
-                    }
-                    console.log(resp)
-                })
-            }
+            };
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        that = this;
+                        console.log(that.ruleForm.name);
+                        axios({
+                            method: 'post',
+                            url: '/push_war/login',
+                            data: Qs.stringify({
+                                'username': that.ruleForm.name,
+                                'password': that.ruleForm.pass,
+                            })
+                        }).then(function (response) {
+                             if (response.status === 200) {
+                                 window.location.href = response.request.responseURL;
+                             }
+                             if( response.status === 201){
+                                 that.$message.error('账户或密码错误请重新输入');
+                             }
+                             if(response.status === 202){
+                                 that.$message.error('请登录');
+                             }
+                        });
+                    } else {
 
-        })
-    </script>
+                        return false;
+                    }
+                });
+
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            open() {
+                this.$alert('请联系管理员添加', '注册提示', {
+                    confirmButtonText: '确定',
+                });
+            }
+        },
+        //当页面加载完成后自动调用
+        mounted() {
+            axios({
+                methods: "get",
+                url: "https://v.api.aa1.cn/api/api-wenan-anwei/index.php?type=json"
+            }).then(function (resp) {
+                if (resp.status == 200) {
+                    document.getElementById("sentence").innerHTML = resp.data.anwei
+                }
+                // console.log(resp)
+            })
+        }
+
+    })
+</script>
 </body>
 
 </html>
